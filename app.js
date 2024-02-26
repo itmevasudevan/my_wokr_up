@@ -2,6 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 //Server Configurations 
 const serverConfig = require("./Config/ServerConfig");
@@ -15,6 +16,7 @@ const session = require("./src/route/session");
 // app 
 const app = express();
 
+
 //Database connection status
 mongoose
   .connect(databaseConfig.dbURL)
@@ -23,6 +25,7 @@ mongoose
 
 
 //MIDDLEWARE
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json({ limit: '10mb' }))
 app.use(bodyParser.urlencoded({
