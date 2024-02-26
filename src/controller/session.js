@@ -9,7 +9,7 @@ let updateCount = 0;
 //ADD USER, METHOD POST 
 const addData = async function(req, res) { 
     let user_data = req.body;
-    if (!user_data.fname || !user_data.age || !user_data.mobile) {
+    if (!user_data.fname || !user_data.lname || !user_data.mobile) {
         res.status(Constants.BAD_REQUEST);
         return res.send({ type: Constants.ERROR_MSG, message: 'Mandatory Data Missing' });
     }
@@ -78,7 +78,7 @@ const updateData = async function(req, res) {
  };
 
 // Count API to retrieve counts from the database
-const getCount = async (req, res) => {
+const getCount = async function(req, res) {
     try {       
         const countData = await Count.findOne({});
         if (!countData) {
@@ -91,8 +91,51 @@ const getCount = async (req, res) => {
     }
 };
 
+
+const getUser = async function(req, res) {
+    try {
+        const user_uid = req.params.user_uid;         
+        
+
+        if (!user_uid) {    
+            res.status(Constants.BAD_REQUEST);
+            return res.send({ type: Constants.ERROR_MSG, message: "Mandatory Data Missing" });
+        }
+
+        const user_db = await User.findOne({user_uid: user_uid, is_active: true, is_deleted: false}); 
+        if(!user_db) {
+            res.status(Constants.NOT_FOUND);
+            return res.send({ type: Constants.ERROR_MSG, message: "Invalid User UID" });
+        }
+
+        res.json(user_db);
+    } catch (error) {    
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
+const getUserAll = async function(req, res) {
+    try {        
+        const user_db = await User.find({ is_active: true, is_deleted: false}); 
+        if(!user_db) {
+            res.status(Constants.NOT_FOUND);
+            return res.send({ type: Constants.ERROR_MSG, message: "Invalid User UID" });
+        }
+
+        res.json(user_db);
+    } catch (error) {    
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+};
+
 module.exports = { 
     addData: addData,
     updateData: updateData,
-    getCount: getCount 
+    getCount: getCount,
+    getUser:getUser,
+    getUserAll:getUserAll
 };

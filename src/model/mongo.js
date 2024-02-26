@@ -8,8 +8,6 @@ const userSchema = new Schema({
     user_uid: { type: String, required: true },
     fname: { type: String, required: true },
     lname: { type: String },
-    age:  { type: String, require: true },   
-    gender: { type: String, enum: ['MALE', 'FEMALE'], required: true },
     mobile: { type: String },
     is_active: { type: Boolean, default: true },
     is_deleted: { type: Boolean, default: false },    
