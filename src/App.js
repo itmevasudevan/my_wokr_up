@@ -87,7 +87,7 @@ const App = () => {
 
       if (editIndex !== null) {
         // If editing, call the update API
-        const editresponse = await axios.put(`http://localhost:8083/add_data/${editIndex}`, formData);
+        await axios.put(`http://localhost:8083/add_data/${editIndex}`, formData);
         // Update the data in the tableData state
         setFormSubmitted(true);
         fetchData();
